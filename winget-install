@@ -535,7 +535,18 @@ if ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -lt 2022) {
 # Check if winget is already installed
 if (Get-WingetStatus) {
     if ($Force -eq $false) {
-        Write-Output "winget zaten kurulu..."
+        Write-Output "ı  =  
+İ  =  
+Ö  =  
+ö  =  
+Ç  =  
+ç  =  
+Ş  =  
+ş  =  
+Ü  =  
+ü  =  
+Ğ  =  
+ğ  =  "
         exit 0
     }
 }
