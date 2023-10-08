@@ -1,0 +1,17 @@
+Set-ExecutionPolicy RemoteSigned -Scope Process -Force
+
+write-output "WinRAR kuruluyor."
+winget install -e --id RARLab.WinRAR --silent --accept-package-agreements --accept-source-agreements --force
+write-output "WinRAR kuruldu."
+
+write-output "Google Chrome kuruluyor."
+winget install -e --id Google.Chrome --silent --accept-package-agreements --accept-source-agreements --force
+write-output "Google Chrome kuruldu."
+
+write-output "TeamViewer kuruluyor."
+winget install -e --id TeamViewer.TeamViewer --silent --accept-package-agreements --accept-source-agreements --force
+write-output "TeamViewer kuruldu."
+
+write-output "AnyDesk kuruluyor."
+winget install -e --id AnyDeskSoftwareGmbH.AnyDesk --silent --accept-package-agreements --accept-source-agreements --force
+write-output "AnyDesk kuruldu."
