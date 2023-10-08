@@ -100,7 +100,7 @@ function Get-OSInfo {
 
         return $result
     } catch {
-        Write-Error "İşletim sistemi sürümü ayrıntıları alınamıyor.Hata: $_"
+        Write-Error "Ä°ÅŸletim sistemi sÃ¼rÃ¼mÃ¼ ayrÄ±ntÄ±larÄ± alÄ±namÄ±yor.Hata: $_"
         exit 1
     }
 }
@@ -127,7 +127,7 @@ function Get-GitHubRelease {
             PublishedDateTime = $PublishedLocalDateTime
         }
     } catch {
-        Write-Error "Güncellemeler kontrol edilemiyor.Hata: $_"
+        Write-Error "GÃ¼ncellemeler kontrol edilemiyor.Hata: $_"
         exit 1
     }
 }
@@ -144,19 +144,19 @@ function CheckForUpdate {
 
     if ($Data.LatestVersion -gt $CurrentVersion) {
         Write-Output "A new version of $RepoName is available."
-        Write-Output "Güncel sürüm: $CurrentVersion."
-        Write-Output "En son sürüm: $($Data.LatestVersion)."
-        Write-Output "Yayınlanma tarihi: $($Data.PublishedDateTime)."
-        Write-Output "En son sürümü şuradan indirebilirsiniz: https://github.com/$RepoOwner/$RepoName/releases"
+        Write-Output "GÃ¼ncel sÃ¼rÃ¼m: $CurrentVersion."
+        Write-Output "En son sÃ¼rÃ¼m: $($Data.LatestVersion)."
+        Write-Output "YayÄ±nlanma tarihi: $($Data.PublishedDateTime)."
+        Write-Output "En son sÃ¼rÃ¼mÃ¼ ÅŸuradan indirebilirsiniz: https://github.com/$RepoOwner/$RepoName/releases"
         if ($PowerShellGalleryName) {
             Write-Output "Or you can run the following command to update:"
             Write-Output "Install-Script $PowerShellGalleryName -Force"
         }
     } else {
         Write-Output "$RepoName is up to date."
-        Write-Output "Güncel sürüm: $CurrentVersion."
-        Write-Output "En son sürüm: $($Data.LatestVersion)."
-        Write-Output "Yayınlanma tarihi: $($Data.PublishedDateTime)."
+        Write-Output "GÃ¼ncel sÃ¼rÃ¼m: $CurrentVersion."
+        Write-Output "En son sÃ¼rÃ¼m: $($Data.LatestVersion)."
+        Write-Output "YayÄ±nlanma tarihi: $($Data.PublishedDateTime)."
         Write-Output "Kaynak: https://github.com/$RepoOwner/$RepoName/releases"
     }
     exit 0
@@ -174,10 +174,10 @@ function Get-WingetDownloadUrl {
     )
 
     $uri = "https://api.github.com/repos/microsoft/winget-cli/releases"
-    Write-Debug "$uri 'den bilgi alınıyor"
+    Write-Debug "$uri 'den bilgi alÄ±nÄ±yor"
     $releases = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
 
-    Write-Debug "Son sürümü alınıyor..."
+    Write-Debug "Son sÃ¼rÃ¼mÃ¼ alÄ±nÄ±yor..."
     foreach ($release in $releases) {
         if ($release.name -match "preview") {
             continue
@@ -188,7 +188,7 @@ function Get-WingetDownloadUrl {
         }
     }
 
-    Write-Debug "Son sürüme geri dönersek..."
+    Write-Debug "Son sÃ¼rÃ¼me geri dÃ¶nersek..."
     $latestRelease = $releases | Select-Object -First 1
     $data = $latestRelease.assets | Where-Object name -Match $Match
     return $data.browser_download_url
@@ -219,9 +219,9 @@ function Update-PathEnvironmentVariable {
         # Check if the new path is already in the PATH variable
         if (!$path.Contains($NewPath)) {
             if ($DebugMode) {
-                Write-Output "$Level için PATH değişkenine $NewPath ekleniyor..."
+                Write-Output "$Level iÃ§in PATH deÄŸiÅŸkenine $NewPath ekleniyor..."
             } else {
-                Write-Output "$Level için PATH değişkeni ekleniyor..."
+                Write-Output "$Level iÃ§in PATH deÄŸiÅŸkeni ekleniyor..."
             }
 
             # Add the new path to the PATH variable
@@ -232,9 +232,9 @@ function Update-PathEnvironmentVariable {
             [Environment]::SetEnvironmentVariable("PATH", $path, $Level)
         } else {
             if ($DebugMode) {
-                Write-Output "$NewPath için PATH değişkeninde zaten mevcut $Level, atlanıyor."
+                Write-Output "$NewPath iÃ§in PATH deÄŸiÅŸkeninde zaten mevcut $Level, atlanÄ±yor."
             } else {
-                Write-Output "için zaten mevcut olan PATH değişkeni $Level, atlanıyor."
+                Write-Output "iÃ§in zaten mevcut olan PATH deÄŸiÅŸkeni $Level, atlanÄ±yor."
             }
         }
     }
@@ -250,25 +250,25 @@ function Handle-Error {
     $ErrorActionPreference = 'SilentlyContinue'
 
     if ($ErrorRecord.Exception.Message -match '0x80073D06') {
-        Write-Warning "Daha yüksek sürüm zaten yüklü."
-        Write-Warning "Sorun değil, devam ediliyor...."
+        Write-Warning "Daha yÃ¼ksek sÃ¼rÃ¼m zaten yÃ¼klÃ¼."
+        Write-Warning "Sorun deÄŸil, devam ediliyor...."
     } elseif ($ErrorRecord.Exception.Message -match '0x80073CF0') {
-        Write-Warning "Aynı sürüm zaten yüklü."
-        Write-Warning "Sorun değil, devam ediliyor...."
+        Write-Warning "AynÄ± sÃ¼rÃ¼m zaten yÃ¼klÃ¼."
+        Write-Warning "Sorun deÄŸil, devam ediliyor...."
     } elseif ($ErrorRecord.Exception.Message -match '0x80073D02') {
         # Stop execution and return the ErrorRecord so that the calling try/catch block throws the error
-        Write-Warning "Değiştirilen kaynaklar kullanımda. Windows Terminal / PowerShell / Komut İstemi'ni kapatmayı ve tekrar denemeyi deneyin."
-        Write-Warning "Sorun devam ederse, bilgisayarınızı yeniden başlatın."
+        Write-Warning "DeÄŸiÅŸtirilen kaynaklar kullanÄ±mda. Windows Terminal / PowerShell / Komut Ä°stemi'ni kapatmayÄ± ve tekrar denemeyi deneyin."
+        Write-Warning "Sorun devam ederse, bilgisayarÄ±nÄ±zÄ± yeniden baÅŸlatÄ±n."
         return $ErrorRecord
-    } elseif ($ErrorRecord.Exception.Message -match 'Uzak sunucuya bağlanılamıyor') {
-        Write-Warning "Gerekli dosyaları indirmek için İnternet'e bağlanılamıyor."
-        Write-Warning "Komut dosyasını tekrar çalıştırmayı deneyin ve internete bağlı olduğunuzdan emin olun."
-        Write-Warning "Bazen nuget.org sunucusu kapalı olabilir, bu nedenle daha sonra tekrar denemeniz gerekebilir."
+    } elseif ($ErrorRecord.Exception.Message -match 'Uzak sunucuya baÄŸlanÄ±lamÄ±yor') {
+        Write-Warning "Gerekli dosyalarÄ± indirmek iÃ§in Ä°nternet'e baÄŸlanÄ±lamÄ±yor."
+        Write-Warning "Komut dosyasÄ±nÄ± tekrar Ã§alÄ±ÅŸtÄ±rmayÄ± deneyin ve internete baÄŸlÄ± olduÄŸunuzdan emin olun."
+        Write-Warning "Bazen nuget.org sunucusu kapalÄ± olabilir, bu nedenle daha sonra tekrar denemeniz gerekebilir."
         return $ErrorRecord
-    } elseif ($ErrorRecord.Exception.Message -match "Uzaktaki ad çözümlenemedi") {
-        Write-Warning "Gerekli dosyaları indirmek için İnternet'e bağlanılamıyor."
-        Write-Warning "Komut dosyasını tekrar çalıştırmayı deneyin ve internete bağlı olduğunuzdan emin olun."
-        Write-Warning "Bilgisayarınızda DNS'in doğru çalıştığından emin olun."
+    } elseif ($ErrorRecord.Exception.Message -match "Uzaktaki ad Ã§Ã¶zÃ¼mlenemedi") {
+        Write-Warning "Gerekli dosyalarÄ± indirmek iÃ§in Ä°nternet'e baÄŸlanÄ±lamÄ±yor."
+        Write-Warning "Komut dosyasÄ±nÄ± tekrar Ã§alÄ±ÅŸtÄ±rmayÄ± deneyin ve internete baÄŸlÄ± olduÄŸunuzdan emin olun."
+        Write-Warning "BilgisayarÄ±nÄ±zda DNS'in doÄŸru Ã§alÄ±ÅŸtÄ±ÄŸÄ±ndan emin olun."
     } else {
         # For other errors, we should stop the execution and return the ErrorRecord so that the calling try/catch block throws the error
         return $ErrorRecord
@@ -316,7 +316,7 @@ function Install-Prerequisite {
     $osVersion = Get-OSInfo
     $arch = $osVersion.Architecture
 
-    Write-Section "${arch} ${Name} İndiriliyor & kuruluyor..."
+    Write-Section "${arch} ${Name} Ä°ndiriliyor & kuruluyor..."
 
     $ThrowReason = @{
         Message = ""
@@ -335,7 +335,7 @@ function Install-Prerequisite {
         }
 
         # If Server 2022 or Windows 10, force non-store version of VCLibs (return true)
-        $messageTemplate = "{OS} algılandı. {NAME}'in {DOMAIN} sürümü kullanılıyor."
+        $messageTemplate = "{OS} algÄ±landÄ±. {NAME}'in {DOMAIN} sÃ¼rÃ¼mÃ¼ kullanÄ±lÄ±yor."
 
         # Determine the OS-specific information
         $osType = $osVersion.Type
@@ -371,7 +371,7 @@ function Install-Prerequisite {
         }
         Write-Output "${arch} ${Name} Kuruluyor..."
         Add-AppxPackage $url -ErrorAction Stop
-        Write-Output "$Name başarıyla kuruldu."
+        Write-Output "$Name baÅŸarÄ±yla kuruldu."
     } catch {
         # Alternate method
         if ($_.Exception.Message -match '0x80073D02') {
@@ -385,7 +385,7 @@ function Install-Prerequisite {
 
             # Throw reason if alternate method is required
             if ($ThrowReason.Code -eq 0) {
-                Write-Warning "$Name indirilmeye veya yüklenmeye çalışılırken hata oluştu. Alternatif yöntem deneniyor..."
+                Write-Warning "$Name indirilmeye veya yÃ¼klenmeye Ã§alÄ±ÅŸÄ±lÄ±rken hata oluÅŸtu. Alternatif yÃ¶ntem deneniyor..."
             } else {
                 Write-Warning $ThrowReason.Message
             }
@@ -402,7 +402,7 @@ function Install-Prerequisite {
                 }
                 Write-Output "${arch} ${Name} Kuruluyor..."
                 Add-AppxPackage $url -ErrorAction Stop
-                Write-Output "$Name başarıyla kuruldu."
+                Write-Output "$Name baÅŸarÄ±yla kuruldu."
             }
 
             # Specific logic for UI.Xaml
@@ -435,9 +435,9 @@ function Install-Prerequisite {
                 Cleanup -Path $uiXaml.nupkgFolder -Recurse
 
                 # Extracting
-                Write-Output "Ayrıştırılıyor..."
+                Write-Output "AyrÄ±ÅŸtÄ±rÄ±lÄ±yor..."
                 if ($DebugMode) {
-                    Write-Output "Klasörün içine: $($uiXaml.nupkgFolder)"
+                    Write-Output "KlasÃ¶rÃ¼n iÃ§ine: $($uiXaml.nupkgFolder)"
                 }
                 Add-Type -Assembly System.IO.Compression.FileSystem
                 [IO.Compression.ZipFile]::ExtractToDirectory($uiXaml.nupkgFilename, $uiXaml.nupkgFolder)
@@ -455,7 +455,7 @@ function Install-Prerequisite {
                     if ($DebugMode) { Write-Output "Kuruluyor appx Package: $($_.Name)" }
                     Add-AppxPackage $_.FullName -ErrorAction Stop
                 }
-                Write-Output "UI.Xaml başarıyla kuruldu."
+                Write-Output "UI.Xaml baÅŸarÄ±yla kuruldu."
 
                 # Cleanup
                 if ($DisableCleanup -eq $false) {
@@ -466,7 +466,7 @@ function Install-Prerequisite {
         } catch {
             # If unable to connect to remote server and Windows 10 or Server 2022, display warning message
             $ShowOldVersionMessage = $False
-            if ($_.Exception.Message -match "Uzak sunucuya bağlanılamıyor") {
+            if ($_.Exception.Message -match "Uzak sunucuya baÄŸlanÄ±lamÄ±yor") {
                 # Determine the correct Windows caption and set $ShowOutput to $True if conditions are met
                 if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -eq 10) {
                     $WindowsCaption = "Windows 10"
@@ -478,10 +478,10 @@ function Install-Prerequisite {
 
                 # Output the warning message if $ShowOldVersionMessage is $True, otherwise output the generic error message
                 if ($ShowOldVersionMessage) {
-                    $OldVersionMessage = "$Name dosyasını indirmek için sunucuya bağlanmada bir sorun var. Ne yazık ki bu, önkoşul sunucu URL'leriyle ilgili bilinen bir sorundur - bazen kapalı olurlar. $WindowsCaption kullandığınız için önkoşulların mağaza dışı sürümlerini kullanmanız gerekir, Windows mağazasındaki önkoşullar çalışmayacaktır, bu nedenle daha sonra tekrar denemeniz veya manuel olarak yüklemeniz gerekebilir."
+                    $OldVersionMessage = "$Name dosyasÄ±nÄ± indirmek iÃ§in sunucuya baÄŸlanmada bir sorun var. Ne yazÄ±k ki bu, Ã¶nkoÅŸul sunucu URL'leriyle ilgili bilinen bir sorundur - bazen kapalÄ± olurlar. $WindowsCaption kullandÄ±ÄŸÄ±nÄ±z iÃ§in Ã¶nkoÅŸullarÄ±n maÄŸaza dÄ±ÅŸÄ± sÃ¼rÃ¼mlerini kullanmanÄ±z gerekir, Windows maÄŸazasÄ±ndaki Ã¶nkoÅŸullar Ã§alÄ±ÅŸmayacaktÄ±r, bu nedenle daha sonra tekrar denemeniz veya manuel olarak yÃ¼klemeniz gerekebilir."
                     Write-Warning $OldVersionMessage
                 } else {
-                    Write-Warning "$Name indirmeye veya yüklemeye çalışırken hata oluştu. Lütfen daha sonra tekrar deneyin veya $Name'i manuel olarak yükleyin."
+                    Write-Warning "$Name indirmeye veya yÃ¼klemeye Ã§alÄ±ÅŸÄ±rken hata oluÅŸtu. LÃ¼tfen daha sonra tekrar deneyin veya $Name'i manuel olarak yÃ¼kleyin."
                 }
             }
 
@@ -505,7 +505,7 @@ if ($CheckForUpdate) {
 
 # Heading
 Write-Output "winget-install $CurrentVersion"
-Write-Output "Güncellemeleri kontrol etmek için winget-install -CheckForUpdate komutunu kullanabilirsiniz."
+Write-Output "GÃ¼ncellemeleri kontrol etmek iÃ§in winget-install -CheckForUpdate komutunu kullanabilirsiniz."
 
 
 # Set OS version
@@ -516,19 +516,19 @@ $arch = $osVersion.Architecture
 
 # If it's a workstation, make sure it is Windows 10+
 if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -lt 10) {
-    Write-Error "winget yalnızca Windows 10 veya üzeri sürümlerle uyumludur."
+    Write-Error "winget yalnÄ±zca Windows 10 veya Ã¼zeri sÃ¼rÃ¼mlerle uyumludur."
     exit 1
 }
 
 # If it's a workstation with Windows 10, make sure it's version 1809 or greater
 if ($osVersion.Type -eq "Workstation" -and $osVersion.NumericVersion -eq 10 -and $osVersion.ReleaseId -lt 1809) {
-    Write-Error "winget yalnızca Windows 10 sürüm 1809 veya üstü ile uyumludur."
+    Write-Error "winget yalnÄ±zca Windows 10 sÃ¼rÃ¼m 1809 veya Ã¼stÃ¼ ile uyumludur."
     exit 1
 }
 
 # If it's a server, it needs to be 2022+
 if ($osVersion.Type -eq "Server" -and $osVersion.NumericVersion -lt 2022) {
-    Write-Error "winget yalnızca Windows Server 2022+ ile uyumludur."
+    Write-Error "winget yalnÄ±zca Windows Server 2022+ ile uyumludur."
     exit 1
 }
 
@@ -564,7 +564,7 @@ try {
     # Output
     Write-Section "winget indiriliyor ve kuruluyor."
 
-    Write-Output "GitHub'dan winget için indirme URL'si alınıyor..."
+    Write-Output "GitHub'dan winget iÃ§in indirme URL'si alÄ±nÄ±yor..."
     $wingetUrl = Get-WingetDownloadUrl -Match "msixbundle"
     $wingetPath = Join-Path -Path $tempFolder -ChildPath "winget.msixbundle"
     $wingetLicenseUrl = Get-WingetDownloadUrl -Match "License1.xml"
@@ -572,7 +572,7 @@ try {
 
     # If the URL is empty, throw error
     if ($wingetUrl -eq "") {
-        throw "URL hatalı"
+        throw "URL hatalÄ±"
     }
 
     Write-Output "winget indiriliyor..."
@@ -601,7 +601,7 @@ try {
     try {
         # Add-AppxPackage will throw an error if the app is already installed or higher version installed, so we need to catch it and continue
         Add-AppxProvisionedPackage -Online -PackagePath $wingetPath -LicensePath $wingetLicensePath -ErrorAction SilentlyContinue | Out-Null
-        Write-Output "winget başarıyla kuruldu."
+        Write-Output "winget baÅŸarÄ±yla kuruldu."
     } catch {
         $errorHandled = Handle-Error $_
         if ($null -ne $errorHandled) {
@@ -621,7 +621,7 @@ try {
     # ============================================================================ #
 
     # Add the WindowsApps directory to the PATH variable
-    Write-Section "Mevcut değilse, geçerli kullanıcı için WindowsApps dizinini kontrol eder ve PATH değişkenine ekler..."
+    Write-Section "Mevcut deÄŸilse, geÃ§erli kullanÄ±cÄ± iÃ§in WindowsApps dizinini kontrol eder ve PATH deÄŸiÅŸkenine ekler..."
     $WindowsAppsPath = [IO.Path]::Combine([Environment]::GetEnvironmentVariable("LOCALAPPDATA"), "Microsoft", "WindowsApps")
     Update-PathEnvironmentVariable -NewPath $WindowsAppsPath
 
@@ -629,28 +629,28 @@ try {
     # Finished
     # ============================================================================ #
 
-    Write-Section "Kurulum tamamlandı!"
+    Write-Section "Kurulum tamamlandÄ±!"
 
     # Timeout for 5 seconds to check winget
-    Write-Output "Winget'in kurulu ve çalışır durumda olup olmadığını kontrol ediliyor..."
+    Write-Output "Winget'in kurulu ve Ã§alÄ±ÅŸÄ±r durumda olup olmadÄ±ÄŸÄ±nÄ± kontrol ediliyor..."
     Start-Sleep -Seconds 3
 
     # Check if winget is installed
     if (Get-WingetStatus -eq $true) {
-        Write-Output "winget şimdi kuruldu ve çalışıyor, devam edebilir ve kullanabilirsiniz."
+        Write-Output "winget ÅŸimdi kuruldu ve Ã§alÄ±ÅŸÄ±yor, devam edebilir ve kullanabilirsiniz."
     } else {
-        Write-Warning "winget yüklü ancak bir komut olarak algılanmıyor. Şimdi winget'i kullanmayı deneyin. Çalışmazsa, yaklaşık 1 dakika bekleyin ve tekrar deneyin (bazen gecikebilir). Ayrıca bilgisayarınızı yeniden başlatmayı deneyin."
-        Write-Warning "Bilgisayarınızı yeniden başlatırsanız ve komut hala tanınmazsa, lütfen README: https://github.com/asheroto/winget-install#troubleshooting adresindeki Sorun Giderme bölümünü okuyun."
-        Write-Warning "Bu komutu çalıştırarak betiğin en son sürümüne sahip olduğunuzdan emin olun: $PowerShellGalleryName -CheckForUpdate"
+        Write-Warning "winget yÃ¼klÃ¼ ancak bir komut olarak algÄ±lanmÄ±yor. Åimdi winget'i kullanmayÄ± deneyin. Ã‡alÄ±ÅŸmazsa, yaklaÅŸÄ±k 1 dakika bekleyin ve tekrar deneyin (bazen gecikebilir). AyrÄ±ca bilgisayarÄ±nÄ±zÄ± yeniden baÅŸlatmayÄ± deneyin."
+        Write-Warning "BilgisayarÄ±nÄ±zÄ± yeniden baÅŸlatÄ±rsanÄ±z ve komut hala tanÄ±nmazsa, lÃ¼tfen README: https://github.com/asheroto/winget-install#troubleshooting adresindeki Sorun Giderme bÃ¶lÃ¼mÃ¼nÃ¼ okuyun."
+        Write-Warning "Bu komutu Ã§alÄ±ÅŸtÄ±rarak betiÄŸin en son sÃ¼rÃ¼mÃ¼ne sahip olduÄŸunuzdan emin olun: $PowerShellGalleryName -CheckForUpdate"
     }
 } catch {
     # ============================================================================ #
     # Error handling
     # ============================================================================ #
 
-    Write-Section "UYARI! Kurulum sırasında bir hata oluştu!"
-    Write-Warning "Yukarıdaki mesajlar yardımcı olmaz ve sorun devam ederse, lütfen README: https://github.com/asheroto/winget-install#troubleshooting adresindeki Sorun Giderme bölümünü okuyun."
-    Write-Warning "Bu komutu çalıştırarak betiğin en son sürümüne sahip olduğunuzdan emin olun: $PowerShellGalleryName -CheckForUpdate"
+    Write-Section "UYARI! Kurulum sÄ±rasÄ±nda bir hata oluÅŸtu!"
+    Write-Warning "YukarÄ±daki mesajlar yardÄ±mcÄ± olmaz ve sorun devam ederse, lÃ¼tfen README: https://github.com/asheroto/winget-install#troubleshooting adresindeki Sorun Giderme bÃ¶lÃ¼mÃ¼nÃ¼ okuyun."
+    Write-Warning "Bu komutu Ã§alÄ±ÅŸtÄ±rarak betiÄŸin en son sÃ¼rÃ¼mÃ¼ne sahip olduÄŸunuzdan emin olun: $PowerShellGalleryName -CheckForUpdate"
 
     # If it's not 0x80073D02 (resources in use), show error
     if ($_.Exception.Message -notmatch '0x80073D02') {
